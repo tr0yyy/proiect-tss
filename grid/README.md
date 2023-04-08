@@ -1,17 +1,18 @@
 # Selenium Grid Server
 
-Requirements:
-1. Java (if it's installed correctly, you must run java command from any terminal) - https://www.java.com/download/ie_manual.jsp
-2. Google Chrome 112.0.5615.X (or any latest version)
+## Cerinte:
+1. Java (daca este instalat corect, ar trebui sa poti apela `java` din terminal) - https://www.java.com/download/ie_manual.jsp
+2. Google Chrome 112.0.5615.X (sau orice versiune updatata)
+3. ChromeDriver 112.0.5615.X (daca iti da eroare de incompatibilitate versiune, trebuie sa-l inlocuiesti cu versiunea corespunzatoare versiunii de Google Chrome: https://chromedriver.chromium.org/downloads)
 
-How to start:
-1. Run `start.bat`
-3. Check `localhost:4444/ui`
+## Pasi pornire:
+1. Porneste `start.bat`
+3. Acceseaza http://localhost:4444/ui
 
-If it worked, you should see:
+Daca totul a functionat corect, ai sa vezi:
 ![hubPage](hub.png)
 
 ## Important:
-- The grid server is configured for your CPU thread number of chromedrivers instances
-- If your test fails, the chromedriver is not killed, you must kill it using task manager, or `kill-chromedrivers.bat` script
-- If your test executes without errors, the chromedriver will be killed by itself
+- Serverul de Selenium poate sa duca pana la un numar de sesiuni simultane egal cu numarul de thread-uri al procesorului
+- Daca testul ti-a dat crash din motive de cod, procesul de `chromedriver.exe` nu s-a oprit, pentru a opri porneste scriptul `kill-chromedrivers.bat`
+- Daca testul a rulat (chiar daca a picat la anumite conditii), `chromedriver.exe` se va opri

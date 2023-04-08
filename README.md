@@ -18,4 +18,4 @@
 ## Pasi pornire framework
 1. Porneste Selenium Grid (Citeste [aici](grid/README.md))
 2. Se ruleaza `run_tests.xml` din IntelliJ pentru pornirea testelor
-3. Pana la realizarea unui output formatat, rezultatele se pot vedea doar in IDE.
+3. Output-ul testului este in `test-output/html/index.html`

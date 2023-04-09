@@ -1,1 +1,1 @@
-pkill -9 -f chromedriver.exe
+taskkill -f -im chromedriver.exe

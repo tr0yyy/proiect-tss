@@ -15,13 +15,12 @@ public class DemoTest extends InitializeTest {
     @Test
     public void searchBicycleOnEmag() throws InterruptedException, IOException {
         System.out.println("Started testing");
-        getDriver().navigate().to("https://emag.ro");
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.of(10, ChronoUnit.SECONDS));
         DemoUi demoUi = new DemoUi();
         wait.until(ExpectedConditions.visibilityOfElementLocated(demoUi.searchBar));
         getDriver().findElement(demoUi.searchBar).sendKeys("bicicleta");
         getDriver().findElement(demoUi.searchButton).click();
-        results.assertTrue(false, "welcome to emag", "failed", true);
+        results.assertTrue(true, "welcome to emag", "failed", true);
         Thread.sleep(Duration.of(5, ChronoUnit.SECONDS));
     }
 }

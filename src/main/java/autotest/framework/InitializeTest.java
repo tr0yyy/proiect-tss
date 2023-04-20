@@ -7,6 +7,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.*;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterTest;
@@ -19,6 +20,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class InitializeTest implements IHookable {
@@ -27,6 +30,7 @@ public class InitializeTest implements IHookable {
     public CapabilityFactory capabilityFactory = new CapabilityFactory();
     public Results results = new Results();
     private static final String KEY = "softassert";
+    public WebDriverWait wait;
 
 
     @BeforeClass
@@ -35,6 +39,10 @@ public class InitializeTest implements IHookable {
         driver.set(new RemoteWebDriver(new URL("http://localhost:4444/"),
                 capabilityFactory.getCapabilities()));
         FileUtils.deleteDirectory(new File(System.getProperty("user.dir") + "\\test-output"));
+        getDriver().navigate().to("https://localhost:44495/");
+
+        // asteapta 10 secunda pana gaseste elementul, daca nu da crash
+        wait = new WebDriverWait(getDriver(), Duration.of(10, ChronoUnit.SECONDS));
     }
 
     public WebDriver getDriver() {
@@ -68,7 +76,7 @@ public class InitializeTest implements IHookable {
             if (condition) {
                 Reporter.log("<p style=\"color: green;\">" + sdf.format(new Date()) + " " + messagePass + "</p>");
             } else {
-                Reporter.log("<p style=\"color: red;\">" + sdf.format(new Date()) + " " + messagePass + "</p>");
+                Reporter.log("<p style=\"color: red;\">" + sdf.format(new Date()) + " " + messageFail + "</p>");
             }
             SoftAssert softAssert = (SoftAssert) object;
             softAssert.assertTrue(condition, messagePass);

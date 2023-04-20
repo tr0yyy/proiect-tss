@@ -6,10 +6,11 @@
         <listener class-name="org.uncommons.reportng.JUnitXMLReporter" />
         <listener class-name="autotest.framework.CustomReportListener" />
     </listeners>
-    <test name="Demo Test" parallel="false" thread-count="5">
+    <test name="Articol Test" parallel="false" thread-count="5">
         <parameter name="browser" value="chrome"/>
         <classes>
-            <class name="autotest.tests.DemoTest" />
+            <class name="autotest.tests.ArticolTest" />
+<!--            <class name=""></class>-->
         </classes>
     </test> <!-- First Test -->
 </suite>

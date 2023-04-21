@@ -42,11 +42,34 @@ public class ArticolTest extends InitializeTest {
                 "articolul a fost creat", "a esuat crearea articolului", true);
     }
 
+    private void modificaArticol(String continut, String continutModificat) throws IOException, InterruptedException {
+        ArticolUI articolUI = new ArticolUI();
+        CreazaArticolUI creazaArticolUI = new CreazaArticolUI();
+
+        getDriver().findElement(articolUI.editeazaArticolButon).click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(creazaArticolUI.mdInput));
+        getDriver().findElement(creazaArticolUI.mdInput).sendKeys(continutModificat);
+        Thread.sleep(Duration.of(3, ChronoUnit.SECONDS));
+
+        getDriver().findElement(articolUI.salveazaModificarileButon).click();
+
+        String mdText = getDriver().findElement(articolUI.mdText).getText();
+        Thread.sleep(Duration.of(3, ChronoUnit.SECONDS));
+
+
+        results.assertTrue(mdText.equals(continut + continutModificat), "Articolul a fost modificat cu succes",
+                "Textul modificat nu corespune", true);
+    }
     @Test
     public void checkCreateEditArticol() throws InterruptedException, IOException {
         String titlu = "Troi Profesor Din Vara" + RandomString.make(4);
         String domeniu = "Istorie";
         String continut = "aaaaaaaaaaaaaaaaaaaaaaaaaaaabcdar";
         creazaArticol(titlu, domeniu, continut);
+
+        String continutModificat = "bbbbbbbbbbb";
+        modificaArticol(continut, continutModificat);
     }
+
 }

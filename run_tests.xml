@@ -10,7 +10,6 @@
         <parameter name="browser" value="chrome"/>
         <classes>
             <class name="autotest.tests.ArticolTest" />
-<!--            <class name=""></class>-->
         </classes>
     </test> <!-- First Test -->
 </suite>

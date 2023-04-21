@@ -34,6 +34,8 @@ public class ArticolTest extends InitializeTest {
 
         getDriver().findElement(creazaArticolUI.domeniuMatSelect).click();
 
+        wait.until(ExpectedConditions.visibilityOfElementLocated(creazaArticolUI.optiuneArtaMatSelect));
+
         switch (domeniu) {
             case "Arta" -> getDriver().findElement(creazaArticolUI.optiuneArtaMatSelect).click();
             case "Geografie" -> getDriver().findElement(creazaArticolUI.optiuneGeografieMatSelect).click();
@@ -51,7 +53,7 @@ public class ArticolTest extends InitializeTest {
     }
 
     public void verificareArticol(String titlu, String domeniu, String continut) throws IOException, InterruptedException {
-        Results.info("Started testing verification of article in the right field",true);
+        results.info("Started testing verification of article in the right field",true);
         Thread.sleep(Duration.of(5, ChronoUnit.SECONDS));
         HomeUi homeUi = new HomeUi();
         getDriver().findElement(homeUi.homeNavButton).click();
@@ -69,6 +71,7 @@ public class ArticolTest extends InitializeTest {
         }};
         //listDomenii contains only the domains different than the one from the article creation input
         listDomenii.remove(domeniu);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(homeUi.domeniuArta));
         switch (domeniu) {
             case "Arta" -> getDriver().findElement(homeUi.domeniuArta).click();
             case "Geografie" -> getDriver().findElement(homeUi.domeniuGeografie).click();
@@ -114,7 +117,7 @@ public class ArticolTest extends InitializeTest {
     }
 
     public void verificareTabel50(String titlu, String domeniu, String continut) throws IOException, InterruptedException, ParseException {
-        Results.info("Started testing verification of article showing in the recent table of articles on homepage",true);
+        results.info("Started testing verification of article showing in the recent table of articles on homepage",true);
         Thread.sleep(Duration.of(5, ChronoUnit.SECONDS));
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String currentDate = dtf.format(LocalDateTime.now(ZoneOffset.UTC));

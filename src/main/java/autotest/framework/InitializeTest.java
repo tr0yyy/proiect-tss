@@ -10,14 +10,11 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.*;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeTest;
 import org.testng.asserts.SoftAssert;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -99,7 +96,7 @@ public class InitializeTest implements IHookable {
             }
         }
 
-        public static void info(String message, boolean makeScreenshot) throws IOException {
+        public void info(String message, boolean makeScreenshot) throws IOException {
             Reporter.log("<p style=\"color: blue;\">" + sdf.format(new Date()) + " " + message + "</p>");
             if (makeScreenshot) {
                 takeScreenshot();
@@ -107,15 +104,15 @@ public class InitializeTest implements IHookable {
         }
 
         public void takeScreenshot() throws IOException {
-            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd_HHmmss");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS");
             System.setProperty("org.uncommons.reportng.escape-output", "false");
             File scrFile = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.FILE);
             String Path = System.getProperty("user.dir") + "\\test-output\\html\\screenshots\\";
             File folder = new File(Path);
-            File screenshotName = new File(Path + "emag" + sdf2.format(new Date()) + ".png");
-            if (folder.mkdirs()) {
+            File screenshotName = new File(Path + "wikipediadaw" + sdf2.format(new Date()) + ".png");
+            if (folder.mkdirs() || folder.exists()) {
                 FileUtils.copyFile(scrFile, screenshotName);
-                Reporter.log("<p style=\"color: blue;\">" + sdf.format(new Date()) + " " + screenshotName + "</p> <a href=" + screenshotName + ">" + "<img src='" + screenshotName + "' height='540' width='960' /></a>");
+                Reporter.log("<p style=\"color: blue;\">" + sdf.format(new Date()) + " " + screenshotName + "</p> <a href=\"" + screenshotName + "\">" + "<img src='" + screenshotName + "' height='540' width='960' /></a>");
             } else {
                 logger.error("Cannot create folder for screenshot " + screenshotName);
             }

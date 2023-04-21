@@ -17,10 +17,10 @@ public class ArticolTest extends InitializeTest {
         ArticolUI articolUI = new ArticolUI();
         CreazaArticolUI creazaArticolUI = new CreazaArticolUI();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(articolUI.creazaArticolButon));
+        //wait.until(ExpectedConditions.visibilityOfElementLocated(articolUI.creazaArticolButon));
         getDriver().findElement(articolUI.creazaArticolButon).click();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(creazaArticolUI.titluInput));
+        //wait.until(ExpectedConditions.visibilityOfElementLocated(creazaArticolUI.titluInput));
         getDriver().findElement(creazaArticolUI.titluInput).sendKeys(titlu);
 
         getDriver().findElement(creazaArticolUI.domeniuMatSelect).click();

@@ -12,7 +12,7 @@ public class HomeUi {
     public By createArticleNavButton = By.xpath("//a[contains(@class,'nav-link') and text()='Creaza articol']");
     public By loginNavButton = By.xpath("//a[contains(@class,'nav-link') and text()='Login']");
     public By registerNavButton = By.xpath("//a[contains(@class,'nav-link') and text()='Register']");
-    public By articoleTable = By.xpath("//tbody");
+    public By articoleTable = By.xpath("//tbody//tr");
     public By articoleColumn1Title = By.xpath("//th[text()='Nume Articol']");
     public By articoleColumn2Title = By.xpath("//th[text()='Domeniu']");
     public By articoleColumn3Title = By.xpath("//th[text()='Data adăugării']");

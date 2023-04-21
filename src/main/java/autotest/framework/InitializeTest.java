@@ -99,7 +99,7 @@ public class InitializeTest implements IHookable {
             }
         }
 
-        public void info(String message, boolean makeScreenshot) throws IOException {
+        public static void info(String message, boolean makeScreenshot) throws IOException {
             Reporter.log("<p style=\"color: blue;\">" + sdf.format(new Date()) + " " + message + "</p>");
             if (makeScreenshot) {
                 takeScreenshot();

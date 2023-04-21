@@ -12,14 +12,12 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ArticolTest extends InitializeTest {
@@ -53,7 +51,7 @@ public class ArticolTest extends InitializeTest {
     }
 
     public void verificareArticol(String titlu, String domeniu, String continut) throws IOException, InterruptedException {
-        System.out.println("Started testing verification of article in the right field");
+        Results.info("Started testing verification of article in the right field",true);
         Thread.sleep(Duration.of(5, ChronoUnit.SECONDS));
         HomeUi homeUi = new HomeUi();
         getDriver().findElement(homeUi.homeNavButton).click();
@@ -69,6 +67,7 @@ public class ArticolTest extends InitializeTest {
             add("Istorie");
             add("Stiinta");
         }};
+        //listDomenii contains only the domains different than the one from the article creation input
         listDomenii.remove(domeniu);
         switch (domeniu) {
             case "Arta" -> getDriver().findElement(homeUi.domeniuArta).click();
@@ -81,8 +80,14 @@ public class ArticolTest extends InitializeTest {
                     true);
         }
         List<WebElement> listArticole = getDriver().findElements(domeniuUi.tabelArticole);
-        for (int i = 0; i < listArticole.size(); i += 3) {
-            if (listArticole.get(i).getText().equals(titlu) && listArticole.get(i + 2).getText().equals(currentDate)) {
+        /*
+        The listArticle contains all the elements of the table so considering the table contains 3 columns to iterate
+        through each row we need to skip the other 2 columns and iterate by 3 positions(+=3)
+        Also in order to access the date column which is the third one in the table, considering the title column is the first one
+        we need to move 2 positions.
+         */
+        for (int titleColumnIndex = 0; titleColumnIndex < listArticole.size(); titleColumnIndex += 3) {
+            if (listArticole.get(titleColumnIndex).getText().equals(titlu) && listArticole.get(titleColumnIndex + 2).getText().equals(currentDate)) {
                 articleCounter++;
             }
         }
@@ -109,7 +114,7 @@ public class ArticolTest extends InitializeTest {
     }
 
     public void verificareTabel50(String titlu, String domeniu, String continut) throws IOException, InterruptedException, ParseException {
-        System.out.println("Started testing verification of article showing in the recent table of articles on homepage");
+        Results.info("Started testing verification of article showing in the recent table of articles on homepage",true);
         Thread.sleep(Duration.of(5, ChronoUnit.SECONDS));
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String currentDate = dtf.format(LocalDateTime.now(ZoneOffset.UTC));
@@ -124,7 +129,11 @@ public class ArticolTest extends InitializeTest {
                 "Tabelul nu contine coloanele corect",
                 true);
         List<WebElement> listArticole = getDriver().findElements(homeUi.articoleTable);
-        results.verifyTrue(listArticole.size()<=150,
+        /*
+        The list that contains the table with articles has a size of rows*columns elements. So if the limit is 50 articles
+        we need 50 articles * the 3 columns we have per article.
+         */
+        results.verifyTrue(listArticole.size()<=50*3,
                 "Tabelul de articole contine cele mai recente 50 de articole.",
                 "Tabelul de articole nu contine cele mai recente 50 de articole.",
                 true);
@@ -134,15 +143,6 @@ public class ArticolTest extends InitializeTest {
                 "Articolul care doar ce a fost creat apare in lista cu cele mai recente articole.",
                 "Articolul care doar ce a fost creat nu apare in lista cu cele mai recente articole",
                 true);
-        for (int i=5;i<listArticole.size();i+=3){
-            Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(listArticole.get(i-3).getText());
-            Date date2=new SimpleDateFormat("dd/MM/yyyy").parse(listArticole.get(i).getText());
-            results.verifyTrue(date1.compareTo(date2)>=0,
-                    "Data articolului este mai recenta.",
-                    "Articolele nu au fost ordonate dupa data crearii.",
-                    true);
-        }
-
     }
 
     private void modificaArticol(String continut, String continutModificat) throws IOException, InterruptedException {

@@ -146,6 +146,15 @@ public class ArticolTest extends InitializeTest {
                 "Articolul care doar ce a fost creat apare in lista cu cele mai recente articole.",
                 "Articolul care doar ce a fost creat nu apare in lista cu cele mai recente articole",
                 true);
+        getDriver().findElement(homeUi.searchHome).sendKeys(titlu);
+        Thread.sleep(Duration.of(5, ChronoUnit.SECONDS));
+        listArticole = getDriver().findElements(homeUi.articoleTable);
+        results.verifyTrue(listArticole.get(0).getText().equals(titlu) &&
+                        listArticole.get(1).getText().equals(domeniu) &&
+                        listArticole.get(2).getText().equals(currentDate),
+                "Articolul a fost gasit in urma folosirii searchului.",
+                "Articolul nu a fost gasit in urma folosirii searchului.",
+                true);
     }
 
     private void modificaArticol(String continut, String continutModificat) throws IOException, InterruptedException {

@@ -82,6 +82,7 @@ public class ArticolTest extends InitializeTest {
                     "Nu exista acest domeniu in lista.",
                     true);
         }
+        wait.until(ExpectedConditions.visibilityOfElementLocated(domeniuUi.tabelArticole));
         List<WebElement> listArticole = getDriver().findElements(domeniuUi.tabelArticole);
         /*
         The listArticle contains all the elements of the table so considering the table contains 3 columns to iterate
@@ -151,12 +152,10 @@ public class ArticolTest extends InitializeTest {
 
     public void searchArticol(String titlu, String domeniu, String continut) throws IOException, InterruptedException{
         results.info("Started testing search.",true);
-        Thread.sleep(Duration.of(5, ChronoUnit.SECONDS));
+        Thread.sleep(Duration.of(3, ChronoUnit.SECONDS));
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String currentDate = dtf.format(LocalDateTime.now(ZoneOffset.UTC));
         HomeUi homeUi = new HomeUi();
-        getDriver().findElement(homeUi.homeNavButton).click();
-        creazaArticol(titlu, domeniu, continut);
         getDriver().findElement(homeUi.homeNavButton).click();
         getDriver().findElement(homeUi.searchHome).sendKeys(titlu);
         Thread.sleep(Duration.of(5, ChronoUnit.SECONDS));
@@ -219,6 +218,7 @@ public class ArticolTest extends InitializeTest {
         String titlu = "Test pentru search." + RandomString.make(4);
         String domeniu = "Istorie";
         String continut = "Se testeaza searchul.";
+        creazaArticol(titlu, domeniu, continut);
         searchArticol(titlu, domeniu, continut);
     }
 

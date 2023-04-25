@@ -47,14 +47,14 @@ public class ArticolTest extends InitializeTest {
         getDriver().findElement(creazaArticolUI.mdInput).sendKeys(continut);
 
         getDriver().findElement(creazaArticolUI.salveazaModificarileButton).click();
-        Thread.sleep(Duration.of(3, ChronoUnit.SECONDS));
+        Thread.sleep(Duration.ofSeconds(3).toMillis());
 
         results.assertTrue(getDriver().getCurrentUrl().contains(titlu.replace(" ", "%20")), "Articolul a fost creat", "a esuat crearea articolului", true);
     }
 
     public void verificareArticol(String titlu, String domeniu, String continut) throws IOException, InterruptedException {
         results.info("Started testing verification of article in the right field",true);
-        Thread.sleep(Duration.of(5, ChronoUnit.SECONDS));
+        Thread.sleep(Duration.ofSeconds(5).toMillis());
         HomeUi homeUi = new HomeUi();
         getDriver().findElement(homeUi.homeNavButton).click();
         creazaArticol(titlu, domeniu, continut);
@@ -118,7 +118,7 @@ public class ArticolTest extends InitializeTest {
 
     public void verificareTabel50(String titlu, String domeniu, String continut) throws IOException, InterruptedException, ParseException {
         results.info("Started testing verification of article showing in the recent table of articles on homepage",true);
-        Thread.sleep(Duration.of(5, ChronoUnit.SECONDS));
+        Thread.sleep(Duration.ofSeconds(5).toMillis());
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String currentDate = dtf.format(LocalDateTime.now(ZoneOffset.UTC));
         HomeUi homeUi = new HomeUi();
@@ -156,12 +156,12 @@ public class ArticolTest extends InitializeTest {
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(creazaArticolUI.mdInput));
         getDriver().findElement(creazaArticolUI.mdInput).sendKeys(continutModificat);
-        Thread.sleep(Duration.of(3, ChronoUnit.SECONDS));
+        Thread.sleep(Duration.ofSeconds(3).toMillis());
 
         getDriver().findElement(articolUI.salveazaModificarileButon).click();
 
         String mdText = getDriver().findElement(articolUI.mdText).getText();
-        Thread.sleep(Duration.of(3, ChronoUnit.SECONDS));
+        Thread.sleep(Duration.ofSeconds(3).toMillis());
 
 
         results.assertTrue(mdText.equals(continut + continutModificat), "Articolul a fost modificat cu succes",

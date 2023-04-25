@@ -15,6 +15,7 @@ public class HomeUi {
     public By homeNavButton = By.xpath("//a[contains(@class,'nav-link') and text()='Home']");
     public By createArticleNavButton = By.xpath("//a[contains(@class,'nav-link') and text()='Creaza articol']");
     public By loginNavButton = By.xpath("//a[contains(@class,'nav-link') and text()='Login']");
+    public By logoutNavButton = By.xpath("//a[@class='nav-link text-dark' and text()='Log Out']");
     public By registerNavButton = By.xpath("//a[contains(@class,'nav-link') and text()='Register']");
     public By articoleTable = By.xpath("//tbody//tr//td");
     public By articoleColumn1Title = By.xpath("//th[text()='Nume Articol']");

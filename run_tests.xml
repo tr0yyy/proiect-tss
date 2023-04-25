@@ -11,5 +11,11 @@
         <classes>
             <class name="autotest.tests.ArticolTest" />
         </classes>
-    </test> <!-- First Test -->
+    </test>
+    <test name="Login Test" parallel="false" thread-count="5">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="autotest.tests.LoginTest" />
+        </classes>
+    </test>
 </suite>

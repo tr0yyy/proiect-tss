@@ -21,6 +21,6 @@ public class DemoTest extends InitializeTest {
         getDriver().findElement(demoUi.searchBar).sendKeys("bicicleta");
         getDriver().findElement(demoUi.searchButton).click();
         results.assertTrue(true, "welcome to emag", "failed", true);
-        Thread.sleep(Duration.of(5, ChronoUnit.SECONDS));
+        Thread.sleep(Duration.ofSeconds(5).toMillis());
     }
 }

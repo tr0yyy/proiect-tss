@@ -1,2 +1,5 @@
-package autotest.tests;public class AdminPanelTest {
+package autotest.tests;
+
+public class AdminPanelTest {
+
 }

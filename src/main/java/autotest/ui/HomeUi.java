@@ -20,5 +20,6 @@ public class HomeUi {
     public By articoleColumn1Title = By.xpath("//th[text()='Nume Articol']");
     public By articoleColumn2Title = By.xpath("//th[text()='Domeniu']");
     public By articoleColumn3Title = By.xpath("//th[text()='Data adăugării']");
+    public By adminPanelNavButton = By.xpath("//a[contains(@class,'nav-link') and text()='Admin Panel']");
 
 }

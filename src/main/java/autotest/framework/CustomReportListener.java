@@ -28,7 +28,7 @@ public class CustomReportListener extends HTMLReporter implements IReporter {
                 try {
                     reportContent = new String(Files.readAllBytes(Paths.get(f.toURI())));
                     // Modify the table HTML to remove the first two columns
-                    reportContent = reportContent.replace("class=\"method\"", "class=\"method\" style=\"display:none;\"");
+                    //reportContent = reportContent.replace("class=\"method\"", "class=\"method\" style=\"display:none;\"");
                     reportContent = reportContent.replace("class=\"duration\"", "class=\"duration\" style=\"display:none;\"");
 
                     // Write the modified HTML report file

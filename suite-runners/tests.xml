@@ -13,4 +13,10 @@
             <class name="autotest.tests.LoginTest" />
         </classes>
     </test>
+    <test name="User Test" parallel="false">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="autotest.tests.UserTest" />
+        </classes>
+    </test>
 </suite>

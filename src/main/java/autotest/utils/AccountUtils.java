@@ -17,7 +17,7 @@ public class AccountUtils extends BaseUtils{
     }
 
     public void register(String username, String email, String password) throws IOException {
-        results.info("Started testing verification of register action",true);
+        results.info(String.format("Creating following account: %s", username),false);
         HomeUi homeUi = new HomeUi();
         RegisterUi registerUi = new RegisterUi();
         wait.until(ExpectedConditions.visibilityOfElementLocated(homeUi.registerNavButton));
@@ -27,11 +27,11 @@ public class AccountUtils extends BaseUtils{
         driver.findElement(registerUi.emailInput).sendKeys(email);
         driver.findElement(registerUi.passwordInput).sendKeys(password);
         driver.findElement(registerUi.registerButton).click();
-        checkLoggedInAccount();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(homeUi.logoutNavButton));
     }
 
     public void login(String username, String password) throws IOException {
-        results.info("Started testing verification of login action",true);
+        results.info(String.format("Login with following account: %s", username),false);
         HomeUi homeUi = new HomeUi();
         LoginUi loginUi = new LoginUi();
         wait.until(ExpectedConditions.visibilityOfElementLocated(homeUi.loginNavButton));
@@ -41,29 +41,31 @@ public class AccountUtils extends BaseUtils{
         driver.findElement(loginUi.usernameInput).sendKeys(username);
         driver.findElement(loginUi.passwordInput).sendKeys(password);
         driver.findElement(loginUi.loginButton).click();
-        checkLoggedInAccount();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(homeUi.logoutNavButton));
     }
 
     public void logout() throws IOException {
-        results.info("Started testing verification of logout action",true);
+        results.info("Started testing verification of logout action",false);
         HomeUi homeUi = new HomeUi();
         wait.until(ExpectedConditions.visibilityOfElementLocated(homeUi.logoutNavButton));
         results.assertTrue(!driver.findElements(homeUi.logoutNavButton).isEmpty(),
-                "Logout button is displayed", "Logout button is not displayed", true);
+                "Logout button is displayed", "Logout button is not displayed", false);
         driver.findElement(homeUi.logoutNavButton).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(homeUi.domeniiList));
         results.assertTrue(driver.findElements(homeUi.logoutNavButton).isEmpty(),
-                "Logout button disappeared", "Logout button is still displayed", true);
+                "Logout button disappeared", "Logout button is still displayed", false);
     }
 
     public void checkLoggedInAccount() throws IOException {
         HomeUi homeUi = new HomeUi();
         wait.until(ExpectedConditions.visibilityOfElementLocated(homeUi.logoutNavButton));
         results.verifyTrue(driver.findElements(homeUi.registerNavButton).isEmpty(),
-                "Register button disappeared", "Register is still there", true);
+                "Register button disappeared", "Register is still there", false);
         results.verifyTrue(driver.findElements(homeUi.loginNavButton).isEmpty(),
-                "Login button disappeared", "Login is still there", true);
+                "Login button disappeared", "Login is still there", false);
         results.verifyTrue(!driver.findElements(homeUi.logoutNavButton).isEmpty(),
-                "Logout button appeared", "Logout button did not appear", true);
+                "Logout button appeared", "Logout button did not appear", false);
     }
+
+
 }

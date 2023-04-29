@@ -25,13 +25,16 @@ public class LoginTest extends InitializeTest {
     }
     @Test
     public void checkRegister() throws IOException {
+        results.info("Started testing verification of register action",true);
         accountUtils.register(username, email, password);
+        accountUtils.checkLoggedInAccount();
         accountUtils.logout();
     }
 
     @Test(dependsOnMethods = {"checkRegister"})
     public void checkLogin() throws InterruptedException, IOException {
         accountUtils.login(username, password);
+        accountUtils.checkLoggedInAccount();
         accountUtils.logout();
     }
 

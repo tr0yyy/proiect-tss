@@ -39,5 +39,6 @@ public class AdminPanelUtils extends BaseUtils {
         }
         driver.findElement(adminPanelUI.saveChangesButton).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(adminPanelUI.userSearchBar));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(homeUi.logoutNavButton));
     }
 }

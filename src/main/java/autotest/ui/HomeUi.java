@@ -12,6 +12,7 @@ public class HomeUi {
     public By domeniuStiinta = By.xpath("//mat-list//a[text()='Stiinta']");
 
     public By searchNavBar = By.xpath("//input[@type='search']");
+    public By searchButton = By.xpath("//button[text()=' Search ']");
     public By homeNavButton = By.xpath("//a[contains(@class,'nav-link') and text()='Home']");
     public By createArticleNavButton = By.xpath("//a[contains(@class,'nav-link') and text()='Creaza articol']");
     public By loginNavButton = By.xpath("//a[contains(@class,'nav-link') and text()='Login']");
@@ -21,5 +22,9 @@ public class HomeUi {
     public By articoleColumn1Title = By.xpath("//th[text()='Nume Articol']");
     public By articoleColumn2Title = By.xpath("//th[text()='Domeniu']");
     public By articoleColumn3Title = By.xpath("//th[text()='Data adăugării']");
+
+    public By searchResultByInput(String text) {
+        return By.xpath("//nav[contains(@class,'navbar')]//a[text()='" + text + "']");
+    }
 
 }

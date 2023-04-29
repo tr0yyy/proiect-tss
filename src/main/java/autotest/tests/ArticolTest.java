@@ -32,24 +32,28 @@ public class ArticolTest extends InitializeTest {
     }
 
     @Test
-    public void checkCreateEditArticol() throws InterruptedException, IOException {
+    public void checkCreateArticol() throws InterruptedException, IOException {
         String titlu = "Troi Profesor Din Vara" + RandomString.make(4);
         String domeniu = "Istorie";
         String continut = "aaaaaaaaaaaaaaaaaaaaaaaaaaaabcdar";
         articolUtils.creazaArticol(titlu, domeniu, continut);
-
-        String continutModificat = "bbbbbbbbbbb";
-        modificaArticol(continut, continutModificat);
     }
 
-    @Test
+    @Test(dependsOnMethods = {"checkCreateArticol"})
+    public void checkEditArticol() throws IOException, InterruptedException {
+        String continut = "aaaaaaaaaaaaaaaaaaaaaaaaaaaabcdar";
+        String continutModificat = "bbbbbbbbbbb";
+        articolUtils.modificaArticol(continut, continutModificat);
+    }
+
+    @Test(dependsOnMethods = {"checkEditArticol"})
     public void checkListArticles() throws InterruptedException, IOException {
         String titlu = "Troi Profesor Din Vara" + RandomString.make(4);
         String domeniu = "Istorie";
         String continut = "aaaaaaaaaaaaaaaaaaaaaaaaaaaabcdar";
         verificareArticol(titlu, domeniu, continut);
     }
-    @Test
+    @Test(dependsOnMethods = {"checkListArticles"})
     public void checkHomeArticleTable() throws InterruptedException, IOException, ParseException {
         String titlu = "Troi Profesor Din Vara" + RandomString.make(4);
         String domeniu = "Istorie";
@@ -131,8 +135,8 @@ public class ArticolTest extends InitializeTest {
         articolUtils.creazaArticol(titlu, domeniu, continut);
         getDriver().findElement(homeUi.homeNavButton).click();
         results.verifyTrue(getDriver().findElement(homeUi.articoleColumn1Title).getText().equals("Nume Articol") &&
-                getDriver().findElement(homeUi.articoleColumn2Title).getText().equals("Domeniu") &&
-                getDriver().findElement(homeUi.articoleColumn3Title).getText().equals("Data adăugării"),
+                        getDriver().findElement(homeUi.articoleColumn2Title).getText().equals("Domeniu") &&
+                        getDriver().findElement(homeUi.articoleColumn3Title).getText().equals("Data adăugării"),
                 "Tabelul contine coloanele corect.",
                 "Tabelul nu contine coloanele corect",
                 true);
@@ -146,31 +150,11 @@ public class ArticolTest extends InitializeTest {
                 "Tabelul de articole nu contine cele mai recente 50 de articole.",
                 true);
         results.verifyTrue(listArticole.get(0).getText().equals(titlu) &&
-                listArticole.get(1).getText().equals(domeniu) &&
-                listArticole.get(2).getText().equals(currentDate),
+                        listArticole.get(1).getText().equals(domeniu) &&
+                        listArticole.get(2).getText().equals(currentDate),
                 "Articolul care doar ce a fost creat apare in lista cu cele mai recente articole.",
                 "Articolul care doar ce a fost creat nu apare in lista cu cele mai recente articole",
                 true);
-    }
-
-    private void modificaArticol(String continut, String continutModificat) throws IOException, InterruptedException {
-        ArticolUI articolUI = new ArticolUI();
-        CreazaArticolUI creazaArticolUI = new CreazaArticolUI();
-
-        getDriver().findElement(articolUI.editeazaArticolButon).click();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(creazaArticolUI.mdInput));
-        getDriver().findElement(creazaArticolUI.mdInput).sendKeys(continutModificat);
-        Thread.sleep(Duration.ofSeconds(3).toMillis());
-
-        getDriver().findElement(articolUI.salveazaModificarileButon).click();
-
-        String mdText = getDriver().findElement(articolUI.mdText).getText();
-        Thread.sleep(Duration.ofSeconds(3).toMillis());
-
-
-        results.assertTrue(mdText.equals(continut + continutModificat), "Articolul a fost modificat cu succes",
-                "Textul modificat nu corespune", true);
     }
 
 }

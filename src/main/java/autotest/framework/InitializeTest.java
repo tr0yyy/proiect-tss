@@ -10,6 +10,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.*;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.asserts.SoftAssert;
 
@@ -31,15 +32,22 @@ public class InitializeTest implements IHookable {
 
 
     @BeforeClass
-    public void setup() throws IOException {
+    public void setup(ITestContext testContext) throws IOException {
         System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "\\grid\\chromedriver.exe");
+
+        if (testContext.getCurrentXmlTest().getParameter("startSelenium") != null &&
+                testContext.getCurrentXmlTest().getParameter("startSelenium").equals("false")) {
+            return;
+        }
+
         driver.set(new RemoteWebDriver(new URL("http://localhost:4444/"),
                 capabilityFactory.getCapabilities()));
-        FileUtils.deleteDirectory(new File(System.getProperty("user.dir") + "\\test-output"));
         getDriver().navigate().to("https://localhost:44495/");
 
         // asteapta 10 secunda pana gaseste elementul, daca nu da crash
         wait = new WebDriverWait(getDriver(), Duration.of(10, ChronoUnit.SECONDS));
+
+
     }
 
     public WebDriver getDriver() {
@@ -47,7 +55,12 @@ public class InitializeTest implements IHookable {
     }
 
     @AfterClass
-    public void tearDown() {
+    public void tearDown(ITestContext testContext) {
+        if (testContext.getCurrentXmlTest().getParameter("startSelenium") != null &&
+                testContext.getCurrentXmlTest().getParameter("startSelenium").equals("false")) {
+            return;
+        }
+
         getDriver().quit();
         driver.remove();
     }
@@ -64,9 +77,9 @@ public class InitializeTest implements IHookable {
         }
     }
 
-    protected class Results {
-        Logger logger = LogManager.getLogger(Results.class);
-        SimpleDateFormat sdf = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss]");
+    public class Results {
+        static Logger logger = LogManager.getLogger(Results.class);
+        static SimpleDateFormat sdf = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss]");
 
         public void verifyTrue(boolean condition, String messagePass, String messageFail, boolean makeScreenshot) throws IOException {
             Object object = Reporter.getCurrentTestResult().getAttribute(KEY);
@@ -78,7 +91,7 @@ public class InitializeTest implements IHookable {
             SoftAssert softAssert = (SoftAssert) object;
             softAssert.assertTrue(condition, messagePass);
             if (makeScreenshot) {
-                takeScreenshot();
+                takeScreenshot(getDriver());
             }
         }
 
@@ -87,11 +100,11 @@ public class InitializeTest implements IHookable {
                 Assert.assertTrue(condition, messagePass);
                 Reporter.log("<p style=\"color: green;\">" + sdf.format(new Date()) + " " + messagePass + "</p>");
                 if (makeScreenshot) {
-                    takeScreenshot();
+                    takeScreenshot(getDriver());
                 }
             } catch (AssertionError error) {
                 Reporter.log("<p style=\"color: red;\">" + sdf.format(new Date()) + " " + messageFail + "</p>");
-                takeScreenshot();
+                takeScreenshot(getDriver());
                 throw error;
             }
         }
@@ -99,14 +112,14 @@ public class InitializeTest implements IHookable {
         public void info(String message, boolean makeScreenshot) throws IOException {
             Reporter.log("<p style=\"color: blue;\">" + sdf.format(new Date()) + " " + message + "</p>");
             if (makeScreenshot) {
-                takeScreenshot();
+                takeScreenshot(getDriver());
             }
         }
 
-        public void takeScreenshot() throws IOException {
+        public static void takeScreenshot(WebDriver driver) throws IOException {
             SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS");
             System.setProperty("org.uncommons.reportng.escape-output", "false");
-            File scrFile = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.FILE);
+            File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             String Path = System.getProperty("user.dir") + "\\test-output\\html\\screenshots\\";
             File folder = new File(Path);
             File screenshotName = new File(Path + "wikipediadaw" + sdf2.format(new Date()) + ".png");

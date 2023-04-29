@@ -5,9 +5,11 @@ import autotest.ui.ArticolUI;
 import autotest.ui.CreazaArticolUI;
 import autotest.ui.DomeniuUi;
 import autotest.ui.HomeUi;
+import autotest.utils.ArticolUtils;
 import net.bytebuddy.utility.RandomString;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -21,35 +23,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArticolTest extends InitializeTest {
-    public void creazaArticol(String titlu, String domeniu, String continut) throws InterruptedException, IOException {
-        System.out.println("Started testing creaza articol");
-        ArticolUI articolUI = new ArticolUI();
-        CreazaArticolUI creazaArticolUI = new CreazaArticolUI();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(articolUI.creazaArticolButon));
-        getDriver().findElement(articolUI.creazaArticolButon).click();
+    private ArticolUtils articolUtils;
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(creazaArticolUI.titluInput));
-        getDriver().findElement(creazaArticolUI.titluInput).sendKeys(titlu);
+    @BeforeClass
+    public void initializeUtils() {
+        this.articolUtils = new ArticolUtils(wait, getDriver(), results);
+    }
 
-        getDriver().findElement(creazaArticolUI.domeniuMatSelect).click();
+    @Test
+    public void checkCreateArticol() throws InterruptedException, IOException {
+        String titlu = "Troi Profesor Din Vara" + RandomString.make(4);
+        String domeniu = "Istorie";
+        String continut = "aaaaaaaaaaaaaaaaaaaaaaaaaaaabcdar";
+        articolUtils.creazaArticol(titlu, domeniu, continut);
+    }
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(creazaArticolUI.optiuneArtaMatSelect));
+    @Test(dependsOnMethods = {"checkCreateArticol"})
+    public void checkEditArticol() throws IOException, InterruptedException {
+        String continut = "aaaaaaaaaaaaaaaaaaaaaaaaaaaabcdar";
+        String continutModificat = "bbbbbbbbbbb";
+        articolUtils.modificaArticol(continut, continutModificat);
+    }
 
-        switch (domeniu) {
-            case "Arta" -> getDriver().findElement(creazaArticolUI.optiuneArtaMatSelect).click();
-            case "Geografie" -> getDriver().findElement(creazaArticolUI.optiuneGeografieMatSelect).click();
-            case "Istorie" -> getDriver().findElement(creazaArticolUI.optiuneIstorieMatSelect).click();
-            case "Stiinta" -> getDriver().findElement(creazaArticolUI.optiuneStiintaMatSelect).click();
-            default -> results.assertTrue(false, "", "nu exista aceasta categorie", true);
-        }
-
-        getDriver().findElement(creazaArticolUI.mdInput).sendKeys(continut);
-
-        getDriver().findElement(creazaArticolUI.salveazaModificarileButton).click();
-        Thread.sleep(Duration.ofSeconds(3).toMillis());
-
-        results.assertTrue(getDriver().getCurrentUrl().contains(titlu.replace(" ", "%20")), "Articolul a fost creat", "a esuat crearea articolului", true);
+    @Test(dependsOnMethods = {"checkEditArticol"})
+    public void checkListArticles() throws InterruptedException, IOException {
+        String titlu = "Troi Profesor Din Vara" + RandomString.make(4);
+        String domeniu = "Istorie";
+        String continut = "aaaaaaaaaaaaaaaaaaaaaaaaaaaabcdar";
+        verificareArticol(titlu, domeniu, continut);
+    }
+    @Test(dependsOnMethods = {"checkListArticles"})
+    public void checkHomeArticleTable() throws InterruptedException, IOException, ParseException {
+        String titlu = "Troi Profesor Din Vara" + RandomString.make(4);
+        String domeniu = "Istorie";
+        String continut = "aaaaaaaaaaaaaaaaaaaaaaaaaaaabcdar";
+        verificareTabel50(titlu, domeniu, continut);
     }
 
     public void verificareArticol(String titlu, String domeniu, String continut) throws IOException, InterruptedException {
@@ -57,7 +66,7 @@ public class ArticolTest extends InitializeTest {
         Thread.sleep(Duration.ofSeconds(5).toMillis());
         HomeUi homeUi = new HomeUi();
         getDriver().findElement(homeUi.homeNavButton).click();
-        creazaArticol(titlu, domeniu, continut);
+        articolUtils.creazaArticol(titlu, domeniu, continut);
         getDriver().findElement(homeUi.homeNavButton).click();
         DomeniuUi domeniuUi = new DomeniuUi();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -123,11 +132,11 @@ public class ArticolTest extends InitializeTest {
         String currentDate = dtf.format(LocalDateTime.now(ZoneOffset.UTC));
         HomeUi homeUi = new HomeUi();
         getDriver().findElement(homeUi.homeNavButton).click();
-        creazaArticol(titlu, domeniu, continut);
+        articolUtils.creazaArticol(titlu, domeniu, continut);
         getDriver().findElement(homeUi.homeNavButton).click();
         results.verifyTrue(getDriver().findElement(homeUi.articoleColumn1Title).getText().equals("Nume Articol") &&
-                getDriver().findElement(homeUi.articoleColumn2Title).getText().equals("Domeniu") &&
-                getDriver().findElement(homeUi.articoleColumn3Title).getText().equals("Data adăugării"),
+                        getDriver().findElement(homeUi.articoleColumn2Title).getText().equals("Domeniu") &&
+                        getDriver().findElement(homeUi.articoleColumn3Title).getText().equals("Data adăugării"),
                 "Tabelul contine coloanele corect.",
                 "Tabelul nu contine coloanele corect",
                 true);
@@ -141,56 +150,11 @@ public class ArticolTest extends InitializeTest {
                 "Tabelul de articole nu contine cele mai recente 50 de articole.",
                 true);
         results.verifyTrue(listArticole.get(0).getText().equals(titlu) &&
-                listArticole.get(1).getText().equals(domeniu) &&
-                listArticole.get(2).getText().equals(currentDate),
+                        listArticole.get(1).getText().equals(domeniu) &&
+                        listArticole.get(2).getText().equals(currentDate),
                 "Articolul care doar ce a fost creat apare in lista cu cele mai recente articole.",
                 "Articolul care doar ce a fost creat nu apare in lista cu cele mai recente articole",
                 true);
-    }
-
-    private void modificaArticol(String continut, String continutModificat) throws IOException, InterruptedException {
-        ArticolUI articolUI = new ArticolUI();
-        CreazaArticolUI creazaArticolUI = new CreazaArticolUI();
-
-        getDriver().findElement(articolUI.editeazaArticolButon).click();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(creazaArticolUI.mdInput));
-        getDriver().findElement(creazaArticolUI.mdInput).sendKeys(continutModificat);
-        Thread.sleep(Duration.ofSeconds(3).toMillis());
-
-        getDriver().findElement(articolUI.salveazaModificarileButon).click();
-
-        String mdText = getDriver().findElement(articolUI.mdText).getText();
-        Thread.sleep(Duration.ofSeconds(3).toMillis());
-
-
-        results.assertTrue(mdText.equals(continut + continutModificat), "Articolul a fost modificat cu succes",
-                "Textul modificat nu corespune", true);
-    }
-    @Test
-    public void checkCreateEditArticol() throws InterruptedException, IOException {
-        String titlu = "Troi Profesor Din Vara" + RandomString.make(4);
-        String domeniu = "Istorie";
-        String continut = "aaaaaaaaaaaaaaaaaaaaaaaaaaaabcdar";
-        creazaArticol(titlu, domeniu, continut);
-
-        String continutModificat = "bbbbbbbbbbb";
-        modificaArticol(continut, continutModificat);
-    }
-
-    @Test
-    public void checkListArticles() throws InterruptedException, IOException {
-        String titlu = "Troi Profesor Din Vara" + RandomString.make(4);
-        String domeniu = "Istorie";
-        String continut = "aaaaaaaaaaaaaaaaaaaaaaaaaaaabcdar";
-        verificareArticol(titlu, domeniu, continut);
-    }
-    @Test
-    public void checkHomeArticleTable() throws InterruptedException, IOException, ParseException {
-        String titlu = "Troi Profesor Din Vara" + RandomString.make(4);
-        String domeniu = "Istorie";
-        String continut = "aaaaaaaaaaaaaaaaaaaaaaaaaaaabcdar";
-        verificareTabel50(titlu, domeniu, continut);
     }
 
 }

@@ -3,7 +3,7 @@
 - Testele vor fi create in `src/main/java/tests`
 - Clasele cu elemente de UI vor fi create in `src/main/java/ui`
 - Clasele cu elemente reutilizabile (algoritmi reutilizabili in mai multe teste) vor fi create in `src/main/java/utils`
-- Testele create vor fi adaugate in `run_tests.xml` dupa aceasta structura:
+- Testele create vor fi adaugate in [suite-runners/tests.xml](suite-runners/tests.xml) dupa aceasta structura:
   ```xml
   <suite ...>
      <!-- Testul pe care vrei sa-l adaugi in scope-ul suitei principale -->

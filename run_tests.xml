@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite thread-count="2" name="Testarea Sistemelor Software" parallel="tests" >
+<suite thread-count="2" name="Testarea Sistemelor Software" parallel="false" >
     <listeners>
         <listener class-name="org.uncommons.reportng.HTMLReporter" />
         <listener class-name="org.uncommons.reportng.JUnitXMLReporter" />
         <listener class-name="autotest.framework.CustomReportListener" />
     </listeners>
-    <test name="Articol Test" parallel="false" thread-count="5">
-        <parameter name="browser" value="chrome"/>
-        <classes>
-            <class name="autotest.tests.ArticolTest" />
-        </classes>
-    </test>
-    <test name="Login Test" parallel="false" thread-count="5">
-        <parameter name="browser" value="chrome"/>
-        <classes>
-            <class name="autotest.tests.LoginTest" />
-        </classes>
-    </test>
+    <suite-files>
+        <suite-file path="suite-runners/prepare.xml" />
+        <suite-file path="suite-runners/tests.xml" />
+    </suite-files>
 </suite>

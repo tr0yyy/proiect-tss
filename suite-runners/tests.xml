@@ -19,4 +19,10 @@
             <class name="autotest.tests.UserTest" />
         </classes>
     </test>
+    <test name="Admin Panel Test" parallel="false">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="autotest.tests.AdminPanelTest" />
+        </classes>
+    </test>
 </suite>
